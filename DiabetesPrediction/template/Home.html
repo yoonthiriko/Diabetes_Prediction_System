@@ -1,0 +1,101 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Diabetes Prediction System</title>
+    <style type="text/css">
+        body {
+            background-image: url("{% static 'DiabetesPrediction/image/Home.png' %}");
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center top;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            text-align: center;
+            padding-top: 60px;
+            padding-button: 10px;
+            padding-right: 50px;
+            padding-left: 50px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            margin: 50px auto;
+            width: 80%;
+            max-width: 800px;
+        }
+        h1 {
+            color: #ffffff;
+            font-size: 40px;
+            font-weight: bold;
+            margin: 0;
+            padding-bottom: 20px;
+        }
+        p {
+            color: #dcdcdc;
+            font-size: 18px;
+            margin: 20px 0;
+        }
+        .button-container {
+            margin: 10px;
+            padding: 10px;
+            line-height: 100px;
+        }
+        input[type=submit] {
+            background-color: #3498db;
+            color: #ffffff;
+            border: none;
+            padding: 16px 32px;
+            cursor: pointer;
+            font-size: 18px;
+            border-radius: 5px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        input[type=submit]:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+            text-decoration: underline;
+        }
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #ffffff;
+            text-align: center;
+            padding: 10px;
+        }
+        .button-container a {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 25px;
+        }
+        .button-container a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Diabetes Prediction System</h1>
+        <p>Our Diabetes Prediction System uses advanced machine learning to assess your health data and provide a prediction for the likelihood of developing diabetes. Enter the details and get a quick assessment that can help you take preventive measures early.</p>
+        <div class="button-container">
+            <form action="predict">
+                <input type="submit" value="Let's go">
+            </form>
+            <a href="#features">Learn More</a>
+            <a href="https://www.linkedin.com/in/yoon-thiri-ko/">Contact Us</a>
+        </div>
+    </div>
+    <footer>
+        <p>© 2024 Diabetes Prediction System | <a href="https://github.com/yoonthiriko">GitHub</a> | <a href="https://www.linkedin.com/in/yoon-thiri-ko/">Contact Us</a></p>
+    </footer>
+</body>
+</html>

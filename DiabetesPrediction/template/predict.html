@@ -1,0 +1,203 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Prediction Page</title>
+    <style>
+        body {
+            background-image: url("{% static 'DiabetesPrediction/image/predictionPage.png' %}");
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .main {
+            width: 450px; /* Adjusted width for better fit */
+            background-color: rgba(255, 255, 255, 0.9); /* Slightly more opaque */
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+        h1 {
+            color: #004d66; /* Adjusted color for better contrast */
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        input[type=submit] {
+            background-color: #3498db;
+            border: none;
+            color: white;
+            font-weight: bold;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-top: 15px;
+            border-radius: 5px;
+            width: 100%;
+            font-size: 16px;
+        }
+        input[type=submit]:hover {
+            text-decoration: underline;
+        }
+        table {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        td {
+            padding: 8px;
+            text-align: left;
+            font-size: 16px;
+        }
+        /* Popup styles */
+        .popup {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.6); /* Darker overlay for better contrast */
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease-out; /* Fade-in animation */
+        }
+        .popup-content {
+            background-color: #fff;
+            margin: auto;
+            padding: 20px;
+            border: 2px solid #3498db;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 10px;
+            position: relative;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.5s ease-out; /* Slide-in animation */
+        }
+        .popup-header {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #3498db;
+        }
+        .popup-message {
+            font-size: 22px;
+            font-weight: bold;
+            color: #114161;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+        }
+        .close-btn {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close-btn:hover {
+            color: black;
+            text-decoration: none;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="main">
+        <h1>Assess Your Diabetes Result</h1>
+        <form id="predictForm" action="result" method="GET">
+            <table>
+                <tr>
+                    <td>Pregnancies:</td>
+                    <td><input type="text" name="n1"></td>
+                </tr>
+                <tr>
+                    <td>Glucose:</td>
+                    <td><input type="text" name="n2"></td>
+                </tr>
+                <tr>
+                    <td>Blood Pressure:</td>
+                    <td><input type="text" name="n3"></td>
+                </tr>
+                <tr>
+                    <td>Skin Thickness:</td>
+                    <td><input type="text" name="n4"></td>
+                </tr>
+                <tr>
+                    <td>Insulin:</td>
+                    <td><input type="text" name="n5"></td>
+                </tr>
+                <tr>
+                    <td>BMI:</td>
+                    <td><input type="text" name="n6"></td>
+                </tr>
+                <tr>
+                    <td>Diabetes Pedigree function:</td>
+                    <td><input type="text" name="n7"></td>
+                </tr>
+                <tr>
+                    <td>Age:</td>
+                    <td><input type="text" name="n8"></td>
+                </tr>
+            </table>
+            <input type="submit" value="Submit">
+        </form>
+        <div id="popup" class="popup">
+            <div class="popup-content">
+                <span class="close-btn" onclick="closePopup()">&times;</span>
+                <div class="popup-header">Prediction Result</div>
+                <p id="popup-message" class="popup-message"></p>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById('predictForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            var formData = new FormData(this);
+            var queryString = new URLSearchParams(formData).toString();
+
+            fetch('/predict/result?' + queryString)
+                .then(response => response.json())
+                .then(data => {
+                    var popup = document.getElementById('popup');
+                    var message = document.getElementById('popup-message');
+                    if (data.result) {
+                        message.textContent = data.result;
+                        popup.style.display = 'flex'; // Show the popup
+                    } else {
+                        message.textContent = 'An error occurred while getting the result.';
+                        popup.style.display = 'flex'; // Show the popup
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    var popup = document.getElementById('popup');
+                    var message = document.getElementById('popup-message');
+                    message.textContent = 'An error occurred while getting the result.';
+                    popup.style.display = 'flex'; // Show the popup
+                });
+        });
+
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
